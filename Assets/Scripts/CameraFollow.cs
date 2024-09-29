@@ -6,6 +6,10 @@ public class CameraFollow : MonoBehaviour {
     private float lastNinjaY; // Lưu trữ vị trí y trước đó của ninja
     private bool isJumping; // Biến để theo dõi trạng thái nhảy của ninja
 
+    private void Awake() {
+        Application.targetFrameRate = 60;
+    }
+
     void Start() {
         if (ninja == null) {
             Debug.LogError("Ninja không được gán cho CameraFollow script.");

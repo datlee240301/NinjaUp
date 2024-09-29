@@ -8,6 +8,10 @@ public class NinjaController : MonoBehaviour {
     public float followSpeed = 2f; // Tốc độ di chuyển của camera
     public float delayBeforeJump = 1f; // Thời gian đứng yên trên không trước khi nhảy
 
+    public GameObject bulletPrefab; // Prefab của đạn
+    public Transform bulletSpawnPoint; // Vị trí để bắn đạn
+    public float bulletSpeed = 10f; // Tốc độ đạn
+
     private Rigidbody2D rb;
     private float screenLeft;
     private float screenRight;
@@ -108,5 +112,21 @@ public class NinjaController : MonoBehaviour {
     IEnumerator HidePlatformAfterDelay(GameObject platform, float delay) {
         yield return new WaitForSeconds(delay);
         platform.SetActive(false); // Ẩn platform
+    }
+
+    // Hàm để bắn đạn khi ấn button
+    public void ShootBullet() {
+        if (bulletPrefab != null && bulletSpawnPoint != null) {
+            // Tạo một viên đạn từ prefab tại vị trí bắn
+            GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
+
+            // Lấy Rigidbody2D của đạn để áp dụng lực
+            Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
+
+            // Bắn đạn bay lên theo hướng trục y
+            bulletRb.velocity = Vector2.up * bulletSpeed;
+        } else {
+            Debug.LogWarning("Bullet prefab or spawn point is not assigned.");
+        }
     }
 }
