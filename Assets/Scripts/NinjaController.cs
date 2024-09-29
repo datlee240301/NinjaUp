@@ -4,26 +4,20 @@ using System.Collections;
 public class NinjaController : MonoBehaviour {
     public float baseJumpForce = 10f; // Lực nhảy cơ bản
     public float platformHideDelay = 1f; // Thời gian để ẩn platform sau va chạm
-    public float screenPadding = 0.5f; // Khoảng cách nhỏ để tránh ninja ra ngoài màn hình
     public float followSpeed = 2f; // Tốc độ di chuyển của camera
     public float delayBeforeJump = 1f; // Thời gian đứng yên trên không trước khi nhảy
+    public float bounceForce = 5f; // Lực bật lại khi va chạm với Wall
 
     public GameObject bulletPrefab; // Prefab của đạn
     public Transform bulletSpawnPoint; // Vị trí để bắn đạn
     public float bulletSpeed = 10f; // Tốc độ đạn
 
     private Rigidbody2D rb;
-    private float screenLeft;
-    private float screenRight;
     private bool isJumping; // Biến để theo dõi trạng thái nhảy của ninja
     private bool isWaitingToJump; // Biến theo dõi khi ninja đang đứng yên chờ nhảy
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
-
-        // Tính toán biên màn hình dựa trên Camera chính
-        screenLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x + screenPadding;
-        screenRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x - screenPadding;
     }
 
     void Update() {
@@ -40,12 +34,6 @@ public class NinjaController : MonoBehaviour {
         if (isJumping) {
             Vector3 newCameraPosition = new Vector3(Camera.main.transform.position.x, transform.position.y, Camera.main.transform.position.z);
             Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, newCameraPosition, followSpeed * Time.deltaTime);
-        }
-
-        // Kiểm tra nếu ninja chạm vào cạnh trái hoặc cạnh phải của màn hình
-        if (transform.position.x <= screenLeft || transform.position.x >= screenRight) {
-            // Đảo ngược vận tốc trên trục x để bật lại
-            rb.velocity = new Vector2(-rb.velocity.x, rb.velocity.y);
         }
 
         // Kiểm tra nếu ninja biến mất khỏi camera
@@ -88,6 +76,23 @@ public class NinjaController : MonoBehaviour {
             // Ẩn platform sau 1 giây
             StartCoroutine(HidePlatformAfterDelay(collision.gameObject, platformHideDelay));
         }
+    }
+
+    // Phát hiện va chạm với các đối tượng có tag "Wall" dùng OnCollisionEnter2D
+    void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.gameObject.CompareTag("Wall")) {
+            // Bật ninja lại khi va chạm với Wall
+            BounceBack(collision);
+        }
+    }
+
+    // Hàm để bật ninja lại khi va chạm với Wall
+    void BounceBack(Collision2D collision) {
+        // Lấy hướng của va chạm
+        Vector2 collisionNormal = collision.contacts[0].normal;
+
+        // Áp dụng lực bật lại theo hướng ngược lại của va chạm
+        rb.velocity = collisionNormal * bounceForce;
     }
 
     // Coroutine để đứng yên 1 giây trước khi nhảy
