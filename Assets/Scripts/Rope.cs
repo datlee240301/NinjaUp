@@ -5,6 +5,7 @@ using UnityEngine;
 public class Rope : MonoBehaviour
 {
     Animator animator;
+    public float timeToHide;
     // Start is called before the first frame update
     private void Awake() {
         animator = GetComponent<Animator>();
@@ -26,7 +27,7 @@ public class Rope : MonoBehaviour
     }
 
     IEnumerator HideObject() {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(timeToHide);
         gameObject.SetActive(false);
     }
 }

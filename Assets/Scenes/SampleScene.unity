@@ -475,7 +475,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ninja: {fileID: 1861889937}
-  followSpeed: 5
+  followSpeed: 10
 --- !u!114 &519420035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -903,7 +903,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &1861889935
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1021,7 +1021,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a33ae0751d5c532419fe62be7a20e23e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseJumpForce: 30
+  baseJumpForce: 20
   platformHideDelay: 0.5
   followSpeed: 2
   delayBeforeJump: 0.25
