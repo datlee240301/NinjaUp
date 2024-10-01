@@ -26,7 +26,7 @@ public class NinjaController : MonoBehaviour {
         {
             isJumping = true;
         } else if (rb.velocity.y < 0 && !isWaitingToJump) // Ninja đang rơi xuống
-          {
+        {
             isJumping = false;
         }
 
@@ -133,5 +133,32 @@ public class NinjaController : MonoBehaviour {
         } else {
             Debug.LogWarning("Bullet prefab or spawn point is not assigned.");
         }
+    }
+
+    // Hàm để ninja bất động, phá hủy enemy trong camera và sau đó rơi xuống
+    public void FreezeAndDestroyEnemies() {
+        StartCoroutine(FreezeAndDestroyCoroutine());
+    }
+
+    private IEnumerator FreezeAndDestroyCoroutine() {
+        // Tạm thời dừng ninja
+        rb.velocity = Vector2.zero;
+        rb.isKinematic = true;
+
+        // Lấy tất cả các enemy trong camera
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies) {
+            Vector3 viewPos = Camera.main.WorldToViewportPoint(enemy.transform.position);
+            // Chỉ phá hủy những enemy trong camera hiện tại
+            if (viewPos.x >= 0 && viewPos.x <= 1 && viewPos.y >= 0 && viewPos.y <= 1) {
+                Destroy(enemy);
+            }
+        }
+
+        // Chờ 1 giây trước khi ninja rơi xuống
+        yield return new WaitForSeconds(1f);
+
+        // Kích hoạt lại trọng lực cho ninja
+        rb.isKinematic = false;
     }
 }

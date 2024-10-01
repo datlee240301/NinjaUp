@@ -2,7 +2,7 @@
 
 public class CameraFollow : MonoBehaviour {
     public Transform ninja; // Ninja cần theo dõi
-    public float followSpeed = 2f; // Tốc độ di chuyển của camera
+    public float followSpeed = 10f; // Tốc độ theo dõi của camera, cao hơn để phản ứng nhanh hơn
     private float lastNinjaY; // Lưu trữ vị trí y trước đó của ninja
     private bool isJumping; // Biến để theo dõi trạng thái nhảy của ninja
 
@@ -26,7 +26,7 @@ public class CameraFollow : MonoBehaviour {
         {
             isJumping = true;
         } else if (ninja.position.y < lastNinjaY) // Ninja đang rơi xuống
-          {
+        {
             isJumping = false;
         }
 
@@ -35,6 +35,7 @@ public class CameraFollow : MonoBehaviour {
         // Theo dõi ninja nếu đang nhảy lên
         if (isJumping) {
             Vector3 newCameraPosition = new Vector3(transform.position.x, ninja.position.y, transform.position.z);
+            // Di chuyển camera đến vị trí của ninja nhanh hơn, nhưng vẫn mượt
             transform.position = Vector3.Lerp(transform.position, newCameraPosition, followSpeed * Time.deltaTime);
         }
     }
