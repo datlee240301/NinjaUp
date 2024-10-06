@@ -6,24 +6,37 @@ public class DrawPlatform : MonoBehaviour {
     private Vector2 startPoint; // Điểm bắt đầu vẽ platform
     private bool isDrawing; // Trạng thái vẽ
 
+    private NinjaController ninjaController; // Tham chiếu đến NinjaController để kiểm tra trạng thái nhảy
+
+    void Start() {
+        // Tìm đối tượng Ninja và lấy component NinjaController
+        ninjaController = FindObjectOfType<NinjaController>();
+        if (ninjaController == null) {
+            Debug.LogError("Không tìm thấy NinjaController!");
+        }
+    }
+
     void Update() {
-        // Khi nhấn chuột (hoặc chạm màn hình) để bắt đầu vẽ platform
-        if (Input.GetMouseButtonDown(0)) {
-            startPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            CreatePlatformAtStartPoint(startPoint);
-            isDrawing = true;
-        }
+        // Chỉ cho phép vẽ platform khi ninja đang rơi
+        if (ninjaController != null && ninjaController.rb.velocity.y < 0) {
+            // Khi nhấn chuột (hoặc chạm màn hình) để bắt đầu vẽ platform
+            if (Input.GetMouseButtonDown(0)) {
+                startPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                CreatePlatformAtStartPoint(startPoint);
+                isDrawing = true;
+            }
 
-        // Khi đang giữ chuột (hoặc giữ tay trên màn hình) để điều chỉnh độ dài của platform
-        if (Input.GetMouseButton(0) && isDrawing) {
-            Vector2 currentPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            UpdatePlatformLength(startPoint, currentPoint);
-        }
+            // Khi đang giữ chuột (hoặc giữ tay trên màn hình) để điều chỉnh độ dài của platform
+            if (Input.GetMouseButton(0) && isDrawing) {
+                Vector2 currentPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                UpdatePlatformLength(startPoint, currentPoint);
+            }
 
-        // Khi thả chuột (hoặc ngừng chạm màn hình) thì dừng vẽ
-        if (Input.GetMouseButtonUp(0) && isDrawing) {
-            isDrawing = false;
-            currentPlatform = null; // Kết thúc platform hiện tại
+            // Khi thả chuột (hoặc ngừng chạm màn hình) thì dừng vẽ
+            if (Input.GetMouseButtonUp(0) && isDrawing) {
+                isDrawing = false;
+                currentPlatform = null; // Kết thúc platform hiện tại
+            }
         }
     }
 

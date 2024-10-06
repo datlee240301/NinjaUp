@@ -12,7 +12,7 @@ public class NinjaController : MonoBehaviour {
     public Transform bulletSpawnPoint; // Vị trí để bắn đạn
     public float bulletSpeed = 10f; // Tốc độ đạn
 
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private bool isJumping; // Biến để theo dõi trạng thái nhảy của ninja
     private bool isWaitingToJump; // Biến theo dõi khi ninja đang đứng yên chờ nhảy
 
