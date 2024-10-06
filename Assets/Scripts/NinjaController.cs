@@ -16,8 +16,11 @@ public class NinjaController : MonoBehaviour {
     private bool isJumping; // Biến để theo dõi trạng thái nhảy của ninja
     private bool isWaitingToJump; // Biến theo dõi khi ninja đang đứng yên chờ nhảy
 
-    void Start() {
+    private void Awake() {
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    void Start() {
     }
 
     void Update() {

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
 public class CameraFollow : MonoBehaviour {
-    public Transform ninja; // Ninja cần theo dõi
     public float followSpeed = 10f; // Tốc độ theo dõi của camera, cao hơn để phản ứng nhanh hơn
+    private Transform ninja; // Ninja cần theo dõi
     private float lastNinjaY; // Lưu trữ vị trí y trước đó của ninja
     private bool isJumping; // Biến để theo dõi trạng thái nhảy của ninja
 
@@ -11,23 +11,26 @@ public class CameraFollow : MonoBehaviour {
     }
 
     void Start() {
-        if (ninja == null) {
-            Debug.LogError("Ninja không được gán cho CameraFollow script.");
-            enabled = false; // Vô hiệu hóa script nếu không có ninja
-            return;
-        }
+        // Tìm vật thể có tag "Ninja"
+        GameObject ninjaObject = GameObject.FindGameObjectWithTag("Ninja");
 
-        lastNinjaY = ninja.position.y;
+        if (ninjaObject != null) {
+            ninja = ninjaObject.transform;
+            lastNinjaY = ninja.position.y;
+        } else {
+            Debug.LogError("Không tìm thấy đối tượng nào với tag 'Ninja'.");
+            enabled = false; // Vô hiệu hóa script nếu không tìm thấy ninja
+        }
     }
 
     void Update() {
+        if (ninja == null) return; // Không làm gì nếu ninja không tồn tại
+
         // Kiểm tra trạng thái nhảy của ninja
-        if (ninja.position.y > lastNinjaY) // Ninja đang nhảy lên
-        {
-            isJumping = true;
-        } else if (ninja.position.y < lastNinjaY) // Ninja đang rơi xuống
-        {
-            isJumping = false;
+        if (ninja.position.y > lastNinjaY) {
+            isJumping = true;  // Ninja đang nhảy lên
+        } else if (ninja.position.y < lastNinjaY) {
+            isJumping = false; // Ninja đang rơi xuống
         }
 
         lastNinjaY = ninja.position.y; // Cập nhật vị trí y của ninja

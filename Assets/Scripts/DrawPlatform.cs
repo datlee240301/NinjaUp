@@ -9,11 +9,7 @@ public class DrawPlatform : MonoBehaviour {
     private NinjaController ninjaController; // Tham chiếu đến NinjaController để kiểm tra trạng thái nhảy
 
     void Start() {
-        // Tìm đối tượng Ninja và lấy component NinjaController
-        ninjaController = FindObjectOfType<NinjaController>();
-        if (ninjaController == null) {
-            Debug.LogError("Không tìm thấy NinjaController!");
-        }
+       FindNinja();
     }
 
     void Update() {
@@ -37,6 +33,14 @@ public class DrawPlatform : MonoBehaviour {
                 isDrawing = false;
                 currentPlatform = null; // Kết thúc platform hiện tại
             }
+        }
+    }
+
+    public void FindNinja() {
+        // Tìm đối tượng Ninja và lấy component NinjaController
+        ninjaController = FindObjectOfType<NinjaController>();
+        if (ninjaController == null) {
+            Debug.LogError("Không tìm thấy NinjaController!");
         }
     }
 
