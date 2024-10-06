@@ -137,10 +137,10 @@ public class NinjaController : MonoBehaviour {
 
     // Hàm để ninja bất động, phá hủy enemy trong camera và sau đó rơi xuống
     public void FreezeAndDestroyEnemies() {
-        StartCoroutine(FreezeAndDestroyCoroutine());
+        FreezeAndDestroyCoroutine();
     }
 
-    private IEnumerator FreezeAndDestroyCoroutine() {
+    private void FreezeAndDestroyCoroutine() {
         // Tạm thời dừng ninja
         rb.velocity = Vector2.zero;
         rb.isKinematic = true;
@@ -154,9 +154,17 @@ public class NinjaController : MonoBehaviour {
                 Destroy(enemy);
             }
         }
+        //AllowToMove();
+    }
 
+    public void AllowToMove() {
+        //StartCoroutine(AllowToMoveCoroutine());
+        AllowToMoveCoroutine();
+    }
+
+    void AllowToMoveCoroutine() {
         // Chờ 1 giây trước khi ninja rơi xuống
-        yield return new WaitForSeconds(1f);
+        //yield return new WaitForSeconds(1f);
 
         // Kích hoạt lại trọng lực cho ninja
         rb.isKinematic = false;
